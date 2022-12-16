@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Role` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -78,16 +79,19 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Member` (
   INDEX `fk_Member_User1_idx` (`User_id` ASC) VISIBLE,
   CONSTRAINT `fk_Member_Project1`
     FOREIGN KEY (`Project_id`)
-    REFERENCES `mydb`.`Project` (`id`),
+    REFERENCES `mydb`.`Project` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Member_Role1`
     FOREIGN KEY (`Role_id`)
     REFERENCES `mydb`.`Role` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Member_User1`
     FOREIGN KEY (`User_id`)
     REFERENCES `mydb`.`User` (`id`)
-    ON DELETE CASCADE)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
 
@@ -106,8 +110,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Executor` (
   CONSTRAINT `fk_Executor_Member1`
     FOREIGN KEY (`Member_id`)
     REFERENCES `mydb`.`Member` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
 
@@ -127,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Section` (
     FOREIGN KEY (`Project_id`)
     REFERENCES `mydb`.`Project` (`id`)
     ON DELETE CASCADE
-    ON UPDATE RESTRICT)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
 
@@ -150,11 +154,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Task` (
   CONSTRAINT `fk_Task_Executor1`
     FOREIGN KEY (`Executor_id`)
     REFERENCES `mydb`.`Executor` (`id`)
-    ON DELETE RESTRICT,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Task_Section1`
     FOREIGN KEY (`Section_id`)
     REFERENCES `mydb`.`Section` (`id`)
-    ON DELETE CASCADE)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
 
@@ -176,7 +182,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Attachment` (
   CONSTRAINT `fk_Attachment_Task`
     FOREIGN KEY (`Task_id`)
     REFERENCES `mydb`.`Task` (`id`)
-    ON DELETE CASCADE)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
 
@@ -193,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Grant` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 21
+AUTO_INCREMENT = 35
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -205,19 +212,21 @@ DROP TABLE IF EXISTS `mydb`.`RoleGrant` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`RoleGrant` (
   `Role_id` INT NOT NULL,
   `Grant_id` INT NOT NULL,
-  INDEX `fk_RoleGrant_Grant11_idx` (`Grant_id` ASC) VISIBLE,
+  INDEX `fk_RoleGrant_Grant1_idx` (`Grant_id` ASC) VISIBLE,
   INDEX `fk_RoleGrant_Role1_idx` (`Role_id` ASC) VISIBLE,
+  PRIMARY KEY (`Role_id`, `Grant_id`),
+  CONSTRAINT `fk_RoleGrant_Grant1`
+    FOREIGN KEY (`Grant_id`)
+    REFERENCES `mydb`.`Grant` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_RoleGrant_Role1`
     FOREIGN KEY (`Role_id`)
     REFERENCES `mydb`.`Role` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_RoleGrant_Grant11`
-    FOREIGN KEY (`Grant_id`)
-    REFERENCES `mydb`.`Grant` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -329,10 +338,6 @@ values ( (select mydb.Role.id from mydb.Role where mydb.Role.slug='developer')
 insert into mydb.RoleGrant (Role_id, Grant_id)
 values ( (select mydb.Role.id from mydb.Role where mydb.Role.slug='developer')
 			,(select mydb.Grant.id from mydb.Grant where mydb.Grant.slug='refuse_task')
-		);
-insert into mydb.RoleGrant (Role_id, Grant_id)
-values ( (select mydb.Role.id from mydb.Role where mydb.Role.slug='developer')
-			,(select mydb.Grant.id from mydb.Grant where mydb.Grant.slug='accept_task')
 		);
 
 
