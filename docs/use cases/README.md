@@ -135,7 +135,6 @@
     
     usecase "<b>CheckRights</b>\nПеревірити права \nкористувача" as CheckRights
     
-    usecase "<b>DeleteProject</b>\nВидалити проєкт" as DeleteProject
     usecase "<b>OpenBoard</b>\nВідкрити дошку \nз розділами \nта завданнями" as OpenBoard
     usecase "<b>EditSection</b>\nРедагувати розділи" as EditSection
     usecase "<b>AddSection</b>\nДодати розділ" as AddSection
