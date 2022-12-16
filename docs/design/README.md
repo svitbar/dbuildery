@@ -43,14 +43,16 @@
     entity Grant
     entity Grant.slug #ffffff
 
+    entity RoleGrant
+
     Project.name --u-*  Project
     Project.description --u-*  Project
     Section "0,*" <--- "1,1" Project
 
     Role.slug --* Role
-
     Grant.slug --* Grant
-    Role "0,*" --> "1,*" Grant
+    Role "1,1" <-- "0,*" RoleGrant
+    RoleGrant "0,*" --> "1,1" Grant
 
     Section.name --l-* Section
 
@@ -138,6 +140,8 @@ namespace AccessPolicy {
     entity Grant <<ENTITY>> {
         slug: TEXT
     }
+    
+    entity RoleGrant <<ENTITY>>
 }
 
 Member "0,*" ---> "1,1" Project
@@ -151,8 +155,8 @@ Section "0,*" -u-> "1,1" Project
 Section "1,1" <-- "0,*" Task
 Task "1,1" <-- "0,*" Attachment
 
-Role "0,*" --> "1,*" Grant
-
+Role "1,1" <-r-- "0,*" RoleGrant
+RoleGrant "0,*" --> "1,1" Grant
 @enduml
 
 </center>
@@ -217,7 +221,7 @@ Role "0,*" --> "1,*" Grant
 - delete_member
 - create_attachment
 - edit_attachment
-- remove_attachment_
+- remove_attachment
 
 <a name="project"></a>
 
