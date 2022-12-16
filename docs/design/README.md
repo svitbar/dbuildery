@@ -204,8 +204,20 @@ Role "0,*" --> "1,*" Grant
 - slug: TEXT. Містить унікальний рядок ідентифікатор, зрозумілий людині, з описом права у форматі snake_case.
 
 Початково у базу даних будуть занесені такі права:
-
-*тут буде список у форматі "rule_name" - що право дозволяє робити*
+- delete_project
+- add_section
+- delete_section
+- create_task
+- edit_task
+- remove_task
+- accept_task
+- refuse_task
+- add_member
+- change_rights
+- delete_member
+- create_attachment
+- edit_attachment
+- remove_attachment_
 
 <a name="project"></a>
 
