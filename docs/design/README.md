@@ -43,14 +43,16 @@
     entity Grant
     entity Grant.slug #ffffff
 
+    entity RoleGrant
+
     Project.name --u-*  Project
     Project.description --u-*  Project
     Section "0,*" <--- "1,1" Project
 
     Role.slug --* Role
-
     Grant.slug --* Grant
-    Role "0,*" --> "1,*" Grant
+    Role "1,1" <-- "0,*" RoleGrant
+    RoleGrant "0,*" --> "1,1" Grant
 
     Section.name --l-* Section
 
@@ -138,6 +140,8 @@ namespace AccessPolicy {
     entity Grant <<ENTITY>> {
         slug: TEXT
     }
+    
+    entity RoleGrant <<ENTITY>>
 }
 
 Member "0,*" ---> "1,1" Project
@@ -151,8 +155,8 @@ Section "0,*" -u-> "1,1" Project
 Section "1,1" <-- "0,*" Task
 Task "1,1" <-- "0,*" Attachment
 
-Role "0,*" --> "1,*" Grant
-
+Role "1,1" <-r-- "0,*" RoleGrant
+RoleGrant "0,*" --> "1,1" Grant
 @enduml
 
 </center>
@@ -187,12 +191,12 @@ Role "0,*" --> "1,*" Grant
 
 ### Role (Роль)
 
-Використовується для визначення прав [учасника](#member). 
+Використовується для визначення ролі [учасника](#member). 
 Має поля:
 
 - slug: TEXT. Містить унікальний рядок ідентифікатор.
 
-Роль може мати від 1 до * [прав](#grant).
+Роль може мати від 0 до * [прав](#grant). Взаємозв'язок ролей і прав визначається у [roleGrant](#rolegrant)
 
 <a name="grant"></a>
 
@@ -204,8 +208,26 @@ Role "0,*" --> "1,*" Grant
 - slug: TEXT. Містить унікальний рядок ідентифікатор, зрозумілий людині, з описом права у форматі snake_case.
 
 Початково у базу даних будуть занесені такі права:
+- delete_project
+- add_section
+- delete_section
+- create_task
+- edit_task
+- remove_task
+- accept_task
+- refuse_task
+- add_member
+- change_rights
+- delete_member
+- create_attachment
+- edit_attachment
+- remove_attachment
 
-*тут буде список у форматі "rule_name" - що право дозволяє робити*
+<a name="rolegrant"></a>
+
+### RoleGrant  
+
+Використовується для призначення [прав](#grant) [ролям](#role). А також для вирішення відношення багато-до-багатьох.
 
 <a name="project"></a>
 
