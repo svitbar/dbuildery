@@ -31,10 +31,10 @@
     usecase "<b>ChangeView</b>\nЗмінити спосіб \nвідображення проєкту \nпорталу" as ChangeView
     usecase "<b>CreateProject</b>\nСтворити проєкт" as CreateProject
     
-    usecase "<b>ProjManage</b>\nРедагування проєкту" as ProjManage
-    usecase "<b>TaskManage</b>\nРедагування завдань" as TaskManage
     usecase "<b>UserControl</b>\nКерування користувачами" as UserControl
     usecase "<b>TaskStatus</b>\nЗміна статусу завдань" as TaskStatus
+    usecase "<b>ProjControl</b>\nКерування проєктом" as ProjControl
+    usecase "<b>ProjDev</b>\nКерування розробкою проєкту" as ProjDev
     
     
     Developer -u-|> User
@@ -46,12 +46,13 @@
     User -u-> SignIn
     User -u-> ChangeView
     User -u-> CreateProject
-    Teamlead -l-> ProjManage
-    Teamlead -r-> TaskManage
+    Teamlead -r-> ProjDev
     Customer -u-> UserControl
+    Customer -r-> ProjControl
     Developer -u-> TaskStatus
 
 @enduml
+
 
 </center>
 
@@ -74,11 +75,10 @@
 
 @startuml
 
-    usecase "<b>UserControl</b>\nКерування користувачами" as UserControl #aaeeaa
-
-
     actor "Замовник" as Customer #eeee99
 
+    usecase "<b>UserControl</b>\nКерування користувачами" as UserControl #aaeeaa
+    usecase "<b>ProjControl</b>\nКерування проєктом" as ProjControl #aaeeaa
 
     usecase "<b>AddMember</b>\nДодати учасника" as AddMember
     usecase "<b>DeleteMember</b>\nВидалити учасника " as DeleteMember
@@ -87,7 +87,9 @@
     
     usecase "<b>UserList</b>\nПереглянути список \n користувачів" as UserList
     usecase "<b>CheckRights</b>\nПеревірити права \nкористувача" as CheckRights
-    Customer -l-> UserControl
+    usecase "<b>DeleteProj</b>\nВидалити проєкт" as DeleteProj
+    Customer -d-> UserControl
+    Customer -d-> ProjControl
     
     
     UserControl .u.> UserList: extends
@@ -96,8 +98,12 @@
     ChangeRights .u.> UserControl: extends
     UserProf .l.> UserList: extends
     
-    UserControl .l.> CheckRights: includes
+    UserControl .r.> CheckRights: includes
 
+
+    DeleteProj .u.> ProjControl: extends
+    ProjControl .l.> CheckRights: includes
+    
 @enduml
 
 </center>
@@ -121,11 +127,11 @@
 
 @startuml
 
-    usecase "<b>ProjManage</b>\nРедагування проєкту" as ProjManage #aaeeaa
+    actor "Тімлід" as Teamlead #eeee99 
     
-    actor "Тімлід" as Teamlead #eeee99
+    usecase "<b>ProjDev</b>\nКерування розробкою проєкту" as ProjDev #aaeeaa
     
-    Teamlead .l.-> ProjManage
+    Teamlead .l.-> ProjDev
     
     usecase "<b>CheckRights</b>\nПеревірити права \nкористувача" as CheckRights
     
@@ -136,15 +142,13 @@
     usecase "<b>DeleteSection</b>\nВидалити розділ" as DeleteSection
     usecase "<b>RenameSection</b>\nПерейменувати розділ" as RenameSection
     
-    ProjManage .u.> OpenBoard: extends
-    DeleteProject .u.> ProjManage: extends
-    EditSection .u.> ProjManage: extends
+    ProjDev .u.> OpenBoard: extends
+    EditSection .u.> ProjDev: extends
     AddSection .u.> EditSection: extends
     DeleteSection .u.> EditSection: extends
     RenameSection .u.> EditSection: extends
 
-    EditSection .d.> CheckRights: includes
-    DeleteProject .d.> CheckRights: includes
+    EditSection .l.> CheckRights: includes
     
 @enduml
 
@@ -165,13 +169,12 @@
 
 @startuml
 
-
-    usecase "<b>ProjManage</b>\nРедагування проєкту" as ProjManage #aaeeaa
+    usecase "<b>ProjDev</b>\nКерування розробкою проєкту" as ProjDev #aaeeaa
     usecase "<b>TaskManage</b>\nРедагування завдань" as TaskManage 
     
     actor "Тімлід" as Teamlead #eeee99
 
-    Teamlead .r.-> ProjManage
+    Teamlead .r.-> ProjDev
     
     usecase "<b>CheckRights</b>\nПеревірити права \nкористувача" as CheckRights
 
@@ -181,7 +184,7 @@
     usecase "<b>EditTask</b>\nРедагувати завдання" as EditTask
     usecase "<b>CloneTask</b>\nКопіювати завдання" as CloneTask
     
-    TaskManage .u.> ProjManage: extends
+    TaskManage .u.> ProjDev: extends
     TaskManage .u.> TaskList: extends
     CreateTask .u.> TaskManage: extends
     EditTask .u.> TaskManage: extends
@@ -1145,13 +1148,13 @@ padding: 1em;"
 
 **Передумови:** 
 1. Користувач увійшов в систему 
-2. Користувач є тімлідом/замовником
+2. Користувач є замовником
 
 **Результат:** Користувач є учасником проєкту
 
 **Виключні ситуації:**
 
-*AddMember_EX_NoRights* - Користувач не має прав тімліда/замовника
+*AddMember_EX_NoRights* - Користувач не має прав замовника
 
 *AddMember_EX_InvalidData* - Користувач ввів неправильні дані
 
@@ -1245,13 +1248,12 @@ padding: 1em;"
 **Передумови:** 
 1. Користувач увійшов в систему
 2. Користувач є замовником
-3. Користувач є тімлідом
 
 **Результат:** Користувач отримує статус
 
 **Виключні ситуації:**
 
-*ChangeRights_EX_NoRights* - Користувач не має прав тімліда
+*ChangeRights_EX_NoRights* - Користувач не має прав замовника
 
 *ChangeRights_EX_SameStatus* - Обраний користувач вже має такий статус
 
