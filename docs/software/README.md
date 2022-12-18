@@ -2,7 +2,7 @@
 
 В рамках проекту розробляється: 
 - SQL-скрипт для створення на початкового наповнення бази даних
-
+```sql
 -- MySQL Workbench Forward Engineering  
   
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;  
@@ -347,6 +347,7 @@ values ( (select mydb.Role.id from mydb.Role where mydb.Role.slug='developer')
   
   
 COMMIT;  
+```
 
 - RESTfull сервіс для управління даними
 
