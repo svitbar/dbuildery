@@ -195,12 +195,22 @@
     usecase "<b>EditName</b>\nЗмінити назву завдання" as EditName
     usecase "<b>EditDescr</b>\nЗмінити опис до завдання" as EditDescr
     usecase "<b>EditDev</b>\nЗмінити розробника завдання" as EditDev
+    usecase "<b>AttachmentManage</b>\nРедагування вкладень" as AttachmentManage
 
     usecase "<b>CheckStatus</b>\nПеревірити статус користувача" as CheckStatus
 
     EditName .u.> EditTask: extends
     EditDescr .u.> EditTask: extends
     EditDev .u.> EditTask: extends
+    AttachmentManage .u.> EditTask: extends
+    
+    usecase "<b>CreateAttachment</b>\nСтворити вкладення" as CreateAttachment
+    usecase "<b>EditAttachment</b>\nРедагувати вкладення" as EditAttachment
+    usecase "<b>RemoveAttachment</b>\nВидалити вкладення" as RemoveAttachment
+
+    CreateAttachment .u.> AttachmentManage: extends
+    EditAttachment .u.> AttachmentManage: extends
+    RemoveAttachment .u.> AttachmentManage: extends
 
     CheckStatus .u.> EditDev: includes
 
