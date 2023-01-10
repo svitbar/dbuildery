@@ -40,7 +40,7 @@
 
 <center>
 
-![](../../assets/images/post-error.png)  
+![](../../assets/imageS/post-name-error.png)  
 
 </center>
 
@@ -78,7 +78,7 @@
 
 <center>
 
-![](../../assets/images/get-put.png)  
+![](../../assets/images/get-after-put.png)  
 
 </center>
 
