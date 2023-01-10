@@ -6,6 +6,9 @@ actionLink: /intro/
 footer: "ECL 2.0 Licensed | Copyright © [2022] [Світлана БАРИЦЬКА Марія Гайдей Людмила ГОРБУНОВА Сергій КОЛОСОВ Вікторія МИЦЬ Нікіта СУТУЛОВ]"
 ---
 
+**Виконала курсову роботу:**  
+
+<span padding-right:5em></span> **Світлана БАРИЦЬКА [Telegram](https://t.me/sbarytska), [GitHub](https://github.com/svitbar), Email svitbar1102@gmail.com**
 
 **Виконали:** 
 
